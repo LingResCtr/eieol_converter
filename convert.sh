@@ -6,10 +6,12 @@ cp $inputfile preconversion.html
 # <span lang="non" class="Unicode"> gets lost in Pandoc; convert it to some
 # textual encoding that's unlikely to appear in the text itself, so that it's
 # preserved, and we can grab it and convert it ourselves later.
-#   <span lang='non' class="Unicode">thing</span> -> <span>(((non-thing)))</span>
+#   <span lang='non' class="Unicode">thing</span> -> <span>(((non--thing</span>
 langcodes='als aln xcl cu ang hit ae peo fro got grc non sga la lv lt orv sa xto txb'
 for isolang in `echo $langcodes | tr " " "\n"`; do
-   sed -i'bkup' s/"<span lang='$isolang' class='Unicode'>"/\<span\>\(\(\($isolang--/g preconversion.html
+   sed -i'bkup' s/"<span lang=['\"]$isolang['\"][^>]*>"/\<span\>\(\(\($isolang--/g preconversion.html
+   sed -i'bkup' s/"<span [^ ]* lang=['\"]$isolang['\"]>"/\<span\>\(\(\($isolang--/g preconversion.html
+   sed -i'bkup' s/"<span [^ ]* lang=['\"]$isolang['\"][^>]*>"/\<span\>\(\(\($isolang--/g preconversion.html
 done
 
 # `pandoc --chapters` just so that it processes h6 in addition to the other header levels...
