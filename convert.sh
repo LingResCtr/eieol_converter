@@ -15,7 +15,8 @@ for isolang in `echo $langcodes | tr " " "\n"`; do
 done
 
 # `pandoc --chapters` just so that it processes h6 in addition to the other header levels...
-pandoc --chapters preconversion.html -o converted.tex
+# `pandoc --standalone` so that it includes document preamble for LaTeX processing
+pandoc --standalone --chapters preconversion.html -o converted.tex
 # pandoc processes h1-h6 different than we want - change the output for those
 sed -i'bkup' s/^\\\\chapter/\\\\title/g converted.tex
 sed -i'bkup' s/^\\\\section/\\\\chapter/g converted.tex
